@@ -1,12 +1,12 @@
 import { View, Text, SafeAreaView, ScrollView, Image } from "react-native";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import React, { useState } from "react";
 import { images } from "../../constants";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { getAuth } from "firebase/auth";
-import GetApp from "../../firebaseConfiguration";
+import firebase from "../../firebase";
+import { ref, set } from "firebase/database";
 
 const SingIn = () => {
   const [form, setForm] = useState({
@@ -15,15 +15,27 @@ const SingIn = () => {
     name: "",
   });
 
-  const app = GetApp();
-  const auth = getAuth(app);
-
   const [errMessage, setErrMessage] = useState("");
 
   const handleSignIn = (e) => {
     e.preventDefault();
     if (form.email && form.password && form.name) {
-      createUserWithEmailAndPassword(auth, form.email, form.password);
+      createUserWithEmailAndPassword(firebase.auth, form.email, form.password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          set(ref(firebase.db, `/users/${user.uid}`), {
+            name: form.name,
+          });
+          setForm({
+            email: "",
+            password: "",
+            name: "",
+          });
+          router.push("/home");
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
     }
   };
 
