@@ -1,11 +1,25 @@
 import { StatusBar } from "expo-status-bar";
 import { Text, View, Image, ScrollView } from "react-native";
+import { useEffect, useState } from "react";
 import { Link, router } from "expo-router";
 import { images } from "../constants";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../components/CustomButton";
+import { onAuthStateChanged } from "firebase/auth";
+import firebase from "../firebase";
 
 export default function App() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    onAuthStateChanged(firebase.auth, (user) => {
+      if (user) {
+        setUser(user);
+        router.push("/home");
+      }
+    });
+  }, [user]);
+
   return (
     <SafeAreaView className="h-full bg-grey" style={{ display: "grid" }}>
       <ScrollView contentContainerStyle={{ height: "100%" }}>

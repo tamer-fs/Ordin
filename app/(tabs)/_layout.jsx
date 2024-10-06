@@ -32,8 +32,8 @@ const TabsLayout = () => {
           tabBarActiveTintColor: "#9E86FF",
           tabBarStyle: {
             backgroundColor: "#1D1F24",
-            borderTopWidth: 1,
             height: 84,
+            borderTopColor: "#1D1F24",
           },
         }}
       >
@@ -46,7 +46,7 @@ const TabsLayout = () => {
               <TabIcon
                 icon={icons.bookmark}
                 color={color}
-                name={"Week"}
+                name={"Activiteiten"}
                 focused={focused}
               />
             ),
@@ -70,13 +70,13 @@ const TabsLayout = () => {
         <Tabs.Screen
           name="share"
           options={{
-            title: "Delen",
+            title: "Account",
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 icon={icons.profile}
                 color={color}
-                name={"Delen"}
+                name={"Account"}
                 focused={focused}
               />
             ),
